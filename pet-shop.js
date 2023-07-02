@@ -2,6 +2,8 @@
 
 const prompt = require("prompt-sync")({sigint:true});
 
+//Classes do sistema
+
 class Cliente{
 
     constructor(nomeCliente,idCliente,pets,fidelizado){
@@ -87,7 +89,7 @@ class Funcionario{
 class Animal extends Cliente{
 
     constructor(nomeCliente,idPet,nomePet,consultas){
-        super(nomeCliente)
+        super(nomeCliente);
         this.idPet = idPet;
         this.nomePet = nomePet;
         this.consultas= consultas;
@@ -96,7 +98,6 @@ class Animal extends Cliente{
     get idPet(){
         return this._idPet;
     }
-
     set idPet(novoIdPet){
         this._idPet = novoIdPet;
     }
@@ -104,28 +105,29 @@ class Animal extends Cliente{
     get nomePet(){
         return this._nomePet;
     }
-
     set nomePet(novoNomePet){
         this._nomePet=novoNomePet;
     }
 
+
     get consultas(){
         return this._consultas;
     }
-
     set consultas(novoConsulta){
         this._consultas= novoConsulta;
     }
+
 
 }
 
 
 class Consultas extends Funcionario{
 
-    constructor(idConsulta,nomeUsuario,nomePet,status,data){
+    constructor(nomeUsuario,idConsulta,nomePet,status,data){
         super(nomeUsuario)
-        this.nomePet = nomePet;
         this.idConsulta = idConsulta;
+        this.nomeUsuario= nomeUsuario
+        this.nomePet = nomePet;
         this.status= status;
         this.data= data;
     }
@@ -136,6 +138,14 @@ class Consultas extends Funcionario{
 
     set idConsulta(novoIdConsulta){
         this._idConsulta = novoIdConsulta;
+    }
+
+    get nomeUsuario(){
+        return this._nomeUsuario;
+    }
+
+    set nomeUsuario(novoNomeUsuario){
+        this._nomeUsuario = novoNomeUsuario;
     }
 
     get nomePet(){
@@ -267,6 +277,7 @@ class Sistema{
     }
 
     listaClientes(){
+        console.log('\n Clientes do Pet Shop');
         let nomeClientes=[];
         for (let n in this.clientes){
             nomeClientes.push(this.clientes[n].nomeCliente);
@@ -277,10 +288,32 @@ class Sistema{
         for (let x in nomeClientes){
             console.log(nomeClientes[x]);
         }
+
+        console.log('\n');
+    }
+
+    listaPets(){
+        console.log('\nAnimais cadastrados no Pet Shop: \n')
+        let nomeAnimais = [];
+        for (let n in this.animais){;
+            nomeAnimais.push(this.animais[n].nomePet);
+        }
+
+        nomeAnimais = nomeAnimais.sort();
+
+
+        for (let x in nomeAnimais){
+            let petAtual = this.animais.find(animal => animal.nomePet===nomeAnimais[x]);
+            console.log(`Pet: ${nomeAnimais[x]}; Tutor: ${petAtual.nomeCliente}`);
+        }
+        console.log('\n');
     }
 
 }
 
+
+
+//Funcoes do sistema
 
 function gerarId(){
     const min=1000
@@ -341,11 +374,22 @@ function criarPets(sistema){
     let pet3= new Animal('fernanda',id3,'tchutchuca',[]);
     let pet4= new Animal('zoe',id4,'maricota',[]);
     
-    sistema.clientes.push(pet1);
-    sistema.clientes.push(pet2);
-    sistema.clientes.push(pet3);
-    sistema.clientes.push(pet4);
+    sistema.animais.push(pet1);
+    sistema.animais.push(pet2);
+    sistema.animais.push(pet3);
+    sistema.animais.push(pet4);
     }
+
+
+
+
+
+
+
+
+
+
+
 
 function Programa(){
     //funcao principal do programa
@@ -412,8 +456,12 @@ function Programa(){
                         case 2:
                             sistema.listaClientes();
                             break
-
+                            
                         case 3:
+                            sistema.listaPets();
+                            break
+
+                        case 4:
                             sair=1;
                             console.log("\nO logout foi efetuado!");
                             break
@@ -426,7 +474,6 @@ function Programa(){
                 }
 
             }
-
 
         }
 
